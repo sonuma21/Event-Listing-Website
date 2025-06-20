@@ -13,6 +13,6 @@ class event extends Model
 
     public function organizer(): BelongsTo
     {
-        return $this->belongsTo(organizer::class);
+        return $this->belongsTo(Organizer::class);
     }
 }

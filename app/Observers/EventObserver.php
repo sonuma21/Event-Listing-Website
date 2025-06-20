@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Mail\EventApprovedNotification;
 use App\Models\Event;
+use App\Models\Organizer;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 
@@ -22,25 +24,38 @@ class EventObserver
      */
     public function updated(Event $event): void
     {
-        if ($event->isDirty('status') && $event->status ===1) {
-         $organizer = $event->organizer;
+        if ($event->isDirty('status') && $event->status == 1) {
+            $organizer = $event->organizer;
 
-            if ($organizer) {
             $data = [
                 'organizer_name' => $organizer->name,
                 'organizer_email' => $organizer->email,
                 'event_title' => $event->title,
-                'event_date' => $event->date->format('Y-m-d'),
+                'event_date' => (new \DateTime($event->date))->format('Y-m-d'),
                 'event_time' => $event->time,
                 'event_location' => $event->location,
-          ];
+                'password' => null,
+            ];
+            if (count($organizer->events)==1) {
+                if ($organizer) {
+                    $password = rand(1111, 9999);
+                    $organizer->password = Hash::make($password);
+                    $organizer->saveQuietly();
 
-            // Send password reset link
-            $token = Password::createToken($organizer);
-            $data['reset_link'] = env('APP_URL') . '/password/reset/' . $token;
+                    $data = [
+                        'organizer_name' => $organizer->name,
+                        'organizer_email' => $organizer->email,
+                        'event_title' => $event->title,
+                        'event_date' => (new \DateTime($event->date))->format('Y-m-d'),
+                        'event_time' => $event->time,
+                        'event_location' => $event->location,
+                        'password' => $password,
+                    ];
+                }
+            }
             Mail::to($organizer->email)->send(new EventApprovedNotification($data));
-         }
-    }}
+        }
+    }
 
 
     /**
