@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class event extends Model
 {
@@ -14,5 +15,9 @@ class event extends Model
     public function organizer(): BelongsTo
     {
         return $this->belongsTo(Organizer::class);
+    }
+     public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class);
     }
 }

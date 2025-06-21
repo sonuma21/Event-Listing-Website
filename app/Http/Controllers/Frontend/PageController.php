@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Mail\EventRequestNotification;
 use App\Models\Admin;
+use App\Models\Category;
 use App\Models\event;
-use App\Models\organizer;
+use App\Models\Organizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -15,16 +16,19 @@ class PageController extends Controller
 {
     public function home()
     {
-        return view('frontend.home');
+        $categories = Category::all();
+        return view('frontend.home', compact('categories'));
     }
+
     public function request_event(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:organizers',
             'phone' => 'required|digits:10',
+            "categories"=>"required",
         ]);
-        $organizer = new organizer();
+        $organizer = new Organizer();
         $organizer->name = $request->name;
         $organizer->email = $request->email;
         $organizer->phone = $request->phone;
@@ -49,6 +53,7 @@ class PageController extends Controller
         }
         $organizer->save();
 
+
         $data = [
             'name' => $request->name,
             'email' => $request->email,
@@ -65,6 +70,8 @@ class PageController extends Controller
        $event->date = $request->date;
        $event->location = $request->location;
        $event->save();
+
+        $event->categories()->attach($request->categories);
 
         return redirect()->route('home');
     }
