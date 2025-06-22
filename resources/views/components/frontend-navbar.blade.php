@@ -76,18 +76,22 @@
                                         <label for="categories" class="block text-sm font-medium text-gray-700 mb-1">
                                             Select categories
                                         </label>
-                                        <select id="categories" name="categories[]" multiple
-                                            class="block w-full h-40 px-3 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition ease-in-out"
-                                            size="5">
+                                        <div
+                                            class="block w-full h-40 px-3 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition ease-in-out overflow-y-auto">
                                             @foreach ($categories as $category)
-                                                <option class="p-2 hover:bg-indigo-100 focus:bg-indigo-100"
-                                                    value="{{ $category->id }}">
-                                                    {{ $category->eng_title }}
-                                                </option>
+                                                <div class="flex items-center mb-2">
+                                                    <input type="checkbox" id="category-{{ $category->id }}"
+                                                        name="categories[]" value="{{ $category->id }}"
+                                                        class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                                    <label for="category-{{ $category->id }}"
+                                                        class="ml-2 text-sm text-gray-700 hover:text-indigo-600">
+                                                        {{ $category->eng_title }}
+                                                    </label>
+                                                </div>
                                             @endforeach
-                                        </select>
-                                        <p class="mt-2 text-sm text-gray-500">Hold down Ctrl (Windows) or ⌘ Command
-                                            (Mac) to select multiple.</p>
+                                        </div>
+                                        <p class="mt-2 text-sm text-gray-500">Select multiple categories by checking the
+                                            boxes.</p>
                                     </div>
 
                                     <div>
@@ -108,8 +112,8 @@
                                     <div>
                                         <label for="images" class="block px-1 mb-2 text-sm">Previously Conducted
                                             Events Photos:</label>
-                                        <input type="file" class="w-full rounded-xl" name="image[]" id="image"
-                                            multiple accept="image/*">
+                                        <input type="file" class="w-full rounded-xl" name="image[]"
+                                            id="image" multiple accept="image/*">
                                     </div>
                                     <div>
                                         <button class="bg-[var(--primary)] px-3 py-2 rounded-xl hover:scale-105">Send
