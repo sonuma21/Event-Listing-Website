@@ -81,6 +81,8 @@ class PageController extends Controller
 
         $event->categories()->attach($request->categories);
 
+        toast("Your request is submitted sucessfully","success");
+        toast("Your request is failed to submit","error");
         return redirect()->route('home');
     }
 }
