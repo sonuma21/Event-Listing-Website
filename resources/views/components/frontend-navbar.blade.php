@@ -53,31 +53,97 @@
                                 @csrf
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
-                                        <label for="name" class="block mb-2 text-sm">Your Name:</label>
-                                        <input type="text" name="name" id="name"
-                                            class="w-full rounded-xl required">
+                                        <label for="name" class="block mb-2 text-sm">Your Name: <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" name="name" id="name" value="{{ old('name') }}"
+                                            class="w-full rounded-xl">
+                                        @error('name')
+                                            <div class="text-red-500">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div>
-                                        <label for="email" class="block px-1 mb-2 text-sm">Your Email:</label>
-                                        <input type="email" name="email" id="email"
-                                            class="w-full rounded-xl required">
+                                        <label for="email" class="block px-1 mb-2 text-sm">Your Email: <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="email" name="email" id="email" value="{{ old('email') }}"
+                                            class="w-full rounded-xl">
+                                        @error('email')
+                                            <div class="text-red-500">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div>
-                                        <label for="phone" class="block px-1 mb-2 text-sm">Your Phone number:</label>
-                                        <input type="tel" name="phone" id="phone"
+                                        <label for="phone" class="block px-1 mb-2 text-sm">Your Phone number:<span
+                                                class="text-red-500">*</span></label>
+                                        <input type="tel" name="phone" id="phone" value="{{ old('phone') }}"
                                             class="w-full rounded-xl required">
+                                        @error('phone')
+                                            <div class="text-red-500">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+
+                                    <div>
+                                        <label for="title" class="block px-1 mb-2 text-sm">Event Title:<span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" name="title" id="title" value="{{ old('title') }}"
+                                            class="w-full rounded-xl">
+                                        @error('title')
+                                            <div class="text-red-500">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label for="date" class="block px-1 mb-2 text-sm">Event Date:<span
+                                                class="text-red-500">*</span></label>
+                                        <input type="date" name="date" id="date" value="{{ old('date') }}"
+                                            class="w-full rounded-xl required">
+                                        @error('date')
+                                            <div class="text-red-500">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div>
-                                        <label for="title" class="block px-1 mb-2 text-sm">Event Title:</label>
-                                        <input type="text" name="title" id="title"
+                                        <label for="time" class="block px-1 mb-2 text-sm">Event Time:<span
+                                                class="text-red-500">*</span></label>
+                                        <input type="time" name="time" id="time" value="{{ old('time') }}"
                                             class="w-full rounded-xl required">
+                                        @error('time')
+                                            <div class="text-red-500">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="categories" class="block text-sm font-medium text-gray-700 mb-1">
-                                            Select categories
+                                    <div>
+                                        <label for="name" class="block px-1 mb-2 text-sm">Event Location:<span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" name="location" id="location"
+                                            value="{{ old('location') }}" class="w-full rounded-xl">
+                                        @error('location')
+                                            <div class="text-red-500">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div>
+                                        <label for="images" class="block px-1 mb-2 text-sm">Previously Conducted
+                                            Events Photos:</label>
+                                        <input type="file" class="w-full rounded-xl" name="image[]"
+                                            id="image" multiple accept="image/*">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="categories" class="block text-sm mb-2">
+                                            Select categories:<span class="text-red-500">*</span>
                                         </label>
                                         <div
-                                            class="block w-full h-40 px-3 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-indigo-500 transition ease-in-out overflow-y-auto">
+                                            class=" w-full px-3 py-1.25 grid grid-cols-2 border border-slate-500 rounded-xl transition ease-in-out overflow-y-auto">
                                             @foreach ($categories as $category)
                                                 <div class="flex items-center mb-2">
                                                     <input type="checkbox" id="category-{{ $category->id }}"
@@ -90,35 +156,48 @@
                                                 </div>
                                             @endforeach
                                         </div>
-                                        <p class="mt-2 text-sm text-gray-500">Select multiple categories by checking the
-                                            boxes.</p>
+                                    </div>
+                                    <div class="relative">
+                                        <!-- Radio buttons to toggle fees requirement -->
+                                        <div class="mb-2 mt-3">
+                                            <label class="inline-flex items-center mr-4">
+                                                <input type="radio" name="feesOption" value="required"
+                                                    class="mr-2" onchange="toggleFees(this.value)">
+                                                <span>Fees Required</span>
+                                            </label>
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" name="feesOption" value="not-required"
+                                                    class="mr-2" onchange="toggleFees(this.value)" checked>
+                                                <span>No Fees</span>
+                                            </label>
+                                        </div>
+                                        <!-- Fees input field, initially hidden -->
+                                        <div id="feesContainer"
+                                            class="relative flex items-center {{ old('feesOption') == 'required' ? '' : 'hidden' }}">
+                                            <label for="fees" class="block px-1 mb-2 text-sm">Event Fees:<span
+                                                    class="text-red-500">*</span></label>
+                                            <div class="relative flex items-center">
+                                                <span class="absolute left-3 text-gray-500">NRP</span>
+                                                <input type="number" name="fees" id="fees" step="5.00"
+                                                    min="0" value="{{ old('fees') }}"
+                                                    class="w-full pl-12 rounded-xl border-slate-500 {{ old('feesOption') == 'required' ? 'required' : '' }}"
+                                                    required>
+                                            </div>
+                                            @error('fees')
+                                                <div class="text-red-500">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <label for="date" class="block px-1 mb-2 text-sm">Event Date:</label>
-                                        <input type="date" name="date" id="date"
-                                            class="w-full rounded-xl required">
-                                    </div>
-                                    <div>
-                                        <label for="time" class="block px-1 mb-2 text-sm">Event Time:</label>
-                                        <input type="time" name="time" id="time"
-                                            class="w-full rounded-xl required">
-                                    </div>
-                                    <div>
-                                        <label for="name" class="block px-1 mb-2 text-sm">Event Location:</label>
-                                        <input type="text" name="location" id="location"
-                                            class="w-full rounded-xl required">
-                                    </div>
-                                    <div>
-                                        <label for="images" class="block px-1 mb-2 text-sm">Previously Conducted
-                                            Events Photos:</label>
-                                        <input type="file" class="w-full rounded-xl" name="image[]"
-                                            id="image" multiple accept="image/*">
-                                    </div>
-                                    <div>
-                                        <button class="bg-[var(--primary)] px-3 py-2 rounded-xl hover:scale-105">Send
-                                            Request</button>
-                                    </div>
+
+
+                                </div>
+                                <div class="flex justify-center items-center mt-6">
+                                    <button
+                                        class="bg-[var(--btn-color)] px-6 py-3   text-white rounded-xl hover:scale-105">Send
+                                        Request</button>
                                 </div>
                             </form>
                         </div>
@@ -169,6 +248,18 @@
                     </ul>
                 </div>
             </div>
+            <script>
+                function toggleFees(value) {
+                    const feesContainer = document.getElementById('feesContainer');
+                    const feesInput = document.getElementById('fees');
+                    feesContainer.classList.toggle('hidden', value !== 'required');
+                    feesInput.required = value === 'required';
+                }
+            </script>
+
         </div>
+
+
+
     </nav>
 </section>

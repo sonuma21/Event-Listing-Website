@@ -16,8 +16,10 @@ class PageController extends Controller
 {
     public function home()
     {
+        $latest_events=event::where('status',1)->orderBy('id','desc')->limit(5)->get();
+
         $categories = Category::all();
-        return view('frontend.home', compact('categories'));
+        return view('frontend.home', compact('categories','latest_events'));
     }
 
     public function request_event(Request $request)
@@ -27,6 +29,11 @@ class PageController extends Controller
             'email' => 'required|email|unique:organizers',
             'phone' => 'required|digits:10',
             "categories"=>"required",
+            'title' => 'required',
+            'location' => 'required',
+            'date' => 'required',
+            'time' => 'required',
+
         ]);
         $organizer = new Organizer();
         $organizer->name = $request->name;
@@ -68,6 +75,7 @@ class PageController extends Controller
        $event->organizer_id = $organizer->id;
        $event->time = $request->time;
        $event->date = $request->date;
+       $event->fees = $request->fees;
        $event->location = $request->location;
        $event->save();
 

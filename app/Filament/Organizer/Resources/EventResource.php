@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Admin\Resources;
+namespace App\Filament\Organizer\Resources;
 
-use App\Filament\Admin\Resources\EventResource\Pages;
-use App\Filament\Admin\Resources\EventResource\RelationManagers;
+use App\Filament\Organizer\Resources\EventResource\Pages;
+use App\Filament\Organizer\Resources\EventResource\RelationManagers;
 use App\Models\Event;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class EventResource extends Resource
 {
@@ -24,31 +25,28 @@ class EventResource extends Resource
         return false;
     }
 
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\DatePicker::make('expire_date')
+                 Forms\Components\FileUpload::make('images')
+                    ->multiple()
+                    ->image()
+                    ->directory('event-images')
+                    ->maxFiles(5)
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif'])
+                    ->maxSize(5120) // 5MB max per file
                     ->required(),
-                Forms\Components\Select::make('status')
-                    ->required()
-                    ->options([
-                        "pending" => "Pending",
-                        "approved" => "Approved",
-                        "suspended" => "Suspended",
-                    ])
-                    ->default('pending'),
+
             ]);
     }
 
     public static function table(Table $table): Table
-    {
+      {
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('organizer.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date')
@@ -57,16 +55,11 @@ class EventResource extends Resource
                 Tables\Columns\TextColumn::make('time'),
                 Tables\Columns\TextColumn::make('location')
                     ->searchable(),
-                Tables\Columns\SelectColumn::make('status')
-                    ->options([
-                        "pending"=>"Pending",
-                        "approved"=>"Approved",
-                        "suspended"=>"Suspended",
-                    ])
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('expire_date')
-                    ->date()
-                    ->sortable(),
+                Tables\Columns\ImageColumn::make('images')
+                    ->stacked()
+                    ->limit(3)
+                    ->limitedRemainingText()
+                    ->circular(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -81,12 +74,18 @@ class EventResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
+            // ->bulkActions([
+            //     Tables\Actions\BulkActionGroup::make([
+            //         Tables\Actions\DeleteBulkAction::make(),
+            //     ]),
+            // ])
+    }
+
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('organizer_id', Auth::guard('organizer')->id());
     }
 
     public static function getRelations(): array

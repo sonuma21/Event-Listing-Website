@@ -24,7 +24,7 @@ class EventObserver
      */
     public function updated(Event $event): void
     {
-        if ($event->isDirty('status') && $event->status == 1) {
+        if ($event->isDirty('status') && $event->status == 'approved') {
             $organizer = $event->organizer;
 
             $data = [

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->date('date');
             $table->time('time');
             $table->string('location');
-            $table->boolean('status')->default(0);
+            $table->boolean('status')->default('pending');
+            $table->double('fees')->nullable();
             $table->json('images')->nullable();
             $table->date('expire_date')->nullable();
 
