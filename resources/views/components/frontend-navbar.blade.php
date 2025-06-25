@@ -1,6 +1,15 @@
-<section class="bg-black">
-    <div class="container text-white flex items-center justify-center">
-        Create your event
+<section class=" bg-black">
+    <div class="container flex items-center gap-2">
+        <div class=" flex gap-1" >
+           <p>Events</p> <i class="ml-2 fa-solid fa-bullhorn"></i>
+        </div>
+        <div class="flex items-center w-full">
+            <marquee behavior="scroll" direction="left" onmouseover="this.stop()" onmouseout="this.start()">
+           @foreach ($latest_events as $event)
+           <a href="{{route('event', $event->id)}}"><i class="ml-8 fa-solid fa-bullhorn"></i> {{$event->title}}</a>
+           @endforeach
+         </marquee>
+        </div>
     </div>
 </section>
 <section class="bg-[var(--primary)]">
@@ -11,7 +20,7 @@
             </div>
             <div>
                 <form action="#" method="get">
-                    <input type="search " name="search" placeholder="search event"
+                    <input type="search" name="search" placeholder="search event"
                         class="border rounded-full px-4 py-1.5">
                     <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
 
@@ -38,7 +47,7 @@
                             </h1>
                             <button type="button"
                                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-                                data-modal-hide="default-modal">
+                                data-modal-hide="request-modal">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 14 14">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -180,8 +189,7 @@
                                                 <span class="absolute left-3 text-gray-500">NRP</span>
                                                 <input type="number" name="fees" id="fees" step="5.00"
                                                     min="0" value="{{ old('fees') }}"
-                                                    class="w-full pl-12 rounded-xl border-slate-500 {{ old('feesOption') == 'required' ? 'required' : '' }}"
-                                                    required>
+                                                    class="w-full pl-12 rounded-xl border-slate-500 {{ old('feesOption') == 'required' ? 'required' : '' }}">
                                             </div>
                                             @error('fees')
                                                 <div class="text-red-500">
@@ -195,7 +203,7 @@
 
                                 </div>
                                 <div class="flex justify-center items-center mt-6">
-                                    <button
+                                    <button type="submit"
                                         class="bg-[var(--btn-color)] px-6 py-3   text-white rounded-xl hover:scale-105">Send
                                         Request</button>
                                 </div>

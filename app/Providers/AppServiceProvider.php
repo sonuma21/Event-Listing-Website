@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Models\Category;
 use App\Observers\EventObserver;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Event;
+use App\Models\event;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,7 +26,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
         Event::observe(EventObserver::class);
-        View::share('categories', Category::all());
+        // View::share('categories', Category::all());
+        // View::share('latest_events', event::all());
 
     }
 }

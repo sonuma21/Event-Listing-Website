@@ -11,15 +11,28 @@ use App\Models\Organizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\View;
 
 class PageController extends Controller
 {
-    public function home()
+    public function __construct()
     {
-        $latest_events=event::where('status',1)->orderBy('id','desc')->limit(5)->get();
 
         $categories = Category::all();
-        return view('frontend.home', compact('categories','latest_events'));
+        $latest_events = event::where('status', 'approved')->orderBy('id', 'desc')->limit(5)->get();
+        View::share([
+            'categories' => $categories,
+            'latest_events' => $latest_events
+
+        ]);
+    }
+
+    public function home()
+    {
+        $latest_events = event::where('status', 'approved')->orderBy('id', 'desc')->limit(5)->get();
+
+        $categories = Category::all();
+        return view('frontend.home', compact('categories', 'latest_events'));
     }
 
     public function request_event(Request $request)
@@ -28,7 +41,7 @@ class PageController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:organizers',
             'phone' => 'required|digits:10',
-            "categories"=>"required",
+            "categories" => "required",
             'title' => 'required',
             'location' => 'required',
             'date' => 'required',
@@ -70,19 +83,39 @@ class PageController extends Controller
         // $admins = Admin::all();
         Mail::to('sonumalmb@gmail.com')->send(new EventRequestNotification($data));
 
-       $event = new event();
-       $event->title = $request->title;
-       $event->organizer_id = $organizer->id;
-       $event->time = $request->time;
-       $event->date = $request->date;
-       $event->fees = $request->fees;
-       $event->location = $request->location;
-       $event->save();
+        $event = new event();
+        $event->title = $request->title;
+        $event->organizer_id = $organizer->id;
+        $event->time = $request->time;
+        $event->date = $request->date;
+        $event->fees = $request->fees;
+        $event->location = $request->location;
+        $event->save();
 
         $event->categories()->attach($request->categories);
 
-        toast("Your request is submitted sucessfully","success");
-        toast("Your request is failed to submit","error");
+        toast("Your request is submitted sucessfully", "success");
         return redirect()->route('home');
+    }
+
+    public function event($id)
+    {
+        $event = event::find($id);
+        $organizer = $event->organizer;
+        $categoryIds = $event->categories->pluck('id');
+        $relatedEvents = Event::where('id', '!=', $event->id)
+                        ->where('status', 'approved')
+                        ->whereHas('categories', function ($query) use ($categoryIds) {
+                            $query->whereIn('category_id', $categoryIds);
+                        })
+                        ->limit(5)
+                        ->get();
+        return view('frontend.event',compact('event','organizer','relatedEvents'));
+    }
+    public function category($slug)
+    {
+        $category= Category::where('slug',$slug)->first();
+        $categoryevents= $category->events()->paginate(8);
+        return view('frontend.category',compact('categoryevents','category'));
     }
 }

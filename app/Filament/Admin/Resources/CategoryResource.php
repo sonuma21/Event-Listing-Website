@@ -29,10 +29,20 @@ class CategoryResource extends Resource
                 Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\FileUpload::make('image')
+                    ->label('Category Image')
+                    ->image()
+                    ->disk('public')
+                    ->directory('categories')
+                    ->visibility('public')
+                    ->imageEditor()
+                    ->imageEditorAspectRatios(['1:1'])
+                    ->circleCropper(),
                 Forms\Components\Textarea::make('meta_keywords')
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('meta_description')
                     ->columnSpanFull(),
+
             ]);
     }
 
@@ -44,6 +54,8 @@ class CategoryResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
+                Tables\Columns\ImageColumn::make('image')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
