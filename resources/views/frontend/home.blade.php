@@ -4,29 +4,29 @@
 
     <section class="">
         <div class="carousel-container">
-            <div class="carousel">
-                <div class="carousel-slide">
-                    <img src="https://cdn.evbstatic.com/s3-build/fe/build/images/ce8b59a5f92f51cefbb4209ee83c0c0d-music_desktop.webp"
-                        alt="Slide 1">
-                    {{-- <div class="carousel-caption"></div> --}}
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://cdn.evbstatic.com/s3-build/fe/build/images/ce8b59a5f92f51cefbb4209ee83c0c0d-music_desktop.webp"
-                        alt="Slide 2">
-                    {{-- <div class="carousel-caption"></div> --}}
-                </div>
-                <div class="carousel-slide">
-                    <img src="https://cdn.evbstatic.com/s3-build/fe/build/images/ce8b59a5f92f51cefbb4209ee83c0c0d-music_desktop.webp"
-                        alt="Slide 3">
-                    {{-- <div class="carousel-caption"></div> --}}
-                </div>
+            <div class="carousel" id="carousel">
+                @foreach ($carousels as $index => $carousel)
+                    @php
+                        $images = is_array($carousel->images) ? $carousel->images : [$carousel->images];
+                    @endphp
+                    @foreach ($images as $image)
+                        <div class="carousel-slide">
+                            <img src="{{ asset('storage/' . $image) }}" alt="Slide {{ $index + 1 }}">
+                        </div>
+                    @endforeach
+                @endforeach
             </div>
-            <button class="prev">&#10094;</button>
-            <button class="next">&#10095;</button>
-            <div class="dots">
-                <span class="dot active"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+            <div class="dots" id="dots">
+                @foreach ($carousels as $index => $carousel)
+                    @php
+                        $images = is_array($carousel->images) ? $carousel->images : [$carousel->images];
+                    @endphp
+                    @foreach ($images as $imageIndex => $image)
+                        <span class="dot {{ $imageIndex === 0 && $index === 0 ? 'active' : '' }}"></span>
+                    @endforeach
+                @endforeach
             </div>
         </div>
     </section>
@@ -47,7 +47,7 @@
                                 class="flex flex-col items-center text-gray-800 no-underline hover:scale-105 transition-transform duration-200">
                                 <div
                                     class="w-30 h-30 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md">
-                                    <img src="{{ asset('storage/' . $category->image)}}"
+                                    <img src="{{ asset('storage/' . $category->image) }}"
                                         alt="{{ $category->eng_title }}" class="w-full h-full object-cover">
                                 </div>
                                 <span class="mt-2 text-sm font-medium text-center">{{ $category->eng_title }}</span>
@@ -67,7 +67,7 @@
             @foreach ($categories as $category)
                 <div>
                     <h1
-                        class="text-3xl mb-5 bg-light-primary py-2 px-3 border-l-4 border-[var(--primary)] mt-5 primary rounded-lg shadow-md">
+                        class="text-3xl mb-5  py-2 px-3 border-l-4 border-[var(--primary)] mt-5 primary rounded-lg shadow-md">
                         {{ $category->eng_title }}
                     </h1>
                     <div class=" grid grid-cols-1 sm:grid-cols-4 gap-3">

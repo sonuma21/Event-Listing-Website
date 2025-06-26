@@ -4,6 +4,7 @@
     --secondary: #b4210a;
     --text-color: #8e8d8e;
     --btn-color: #8aab59;
+    --light-yellow: #ededd6;
 }
 .container {
     width: 86%;
@@ -21,6 +22,10 @@ body {
 
 .text-secondary {
     color: var(--secondary);
+}
+
+.bg-primary {
+    background-color: var(--light-yellow);
 }
 .carousel-container {
     width: 100%;

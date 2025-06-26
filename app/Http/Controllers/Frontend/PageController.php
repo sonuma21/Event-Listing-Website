@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Mail\EventRequestNotification;
 use App\Models\Admin;
+use App\Models\CarouselImage;
 use App\Models\Category;
 use App\Models\event;
 use App\Models\Organizer;
@@ -30,9 +31,9 @@ class PageController extends Controller
     public function home()
     {
         $latest_events = event::where('status', 'approved')->orderBy('id', 'desc')->limit(5)->get();
-
+        $carousels = CarouselImage::all();
         $categories = Category::all();
-        return view('frontend.home', compact('categories', 'latest_events'));
+        return view('frontend.home', compact('categories', 'latest_events','carousels'));
     }
 
     public function request_event(Request $request)

@@ -33,67 +33,129 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"
         integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
+
     <script>
-        let currentIndex = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const dots = document.querySelectorAll('.dot');
-        const totalSlides = slides.length;
-        let autoSlideInterval;
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentIndex = 0;
+            const carousel = document.querySelector('.carousel');
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.dot');
+            const totalSlides = slides.length;
+            let autoSlideInterval;
+            let isDragging = false;
+            let startPos = 0;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
 
-        function showSlide(index) {
-            if (index >= totalSlides) currentIndex = 0;
-            else if (index < 0) currentIndex = totalSlides - 1;
-            else currentIndex = index;
+            if (!carousel || !slides.length || !dots.length) return;
 
-            document.querySelector('.carousel').style.transform = `translateX(-${currentIndex * 100}%)`;
+            function updateSlidePosition() {
+                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[currentIndex]?.classList.add('active');
+            }
 
-            dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentIndex].classList.add('active');
-        }
+            function showSlide(index) {
+                if (index >= totalSlides) currentIndex = 0;
+                else if (index < 0) currentIndex = totalSlides - 1;
+                else currentIndex = index;
+                carousel.style.transition = 'transform 0.5s ease-in-out';
+                updateSlidePosition();
+            }
 
-        function nextSlide() {
-            showSlide(currentIndex + 1);
-        }
+            function nextSlide() {
+                showSlide(currentIndex + 1);
+            }
 
-        function prevSlide() {
-            showSlide(currentIndex - 1);
-        }
+            function prevSlide() {
+                showSlide(currentIndex - 1);
+            }
 
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(nextSlide, 5000);
-        }
-
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
-        }
-
-        document.querySelector('.next').addEventListener('click', () => {
-            stopAutoSlide();
-            nextSlide();
-            startAutoSlide();
-        });
-
-        document.querySelector('.prev').addEventListener('click', () => {
-            stopAutoSlide();
-            prevSlide();
-            startAutoSlide();
-        });
-
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
+            function startAutoSlide() {
                 stopAutoSlide();
-                showSlide(index);
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            }
+
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+
+            // Button navigation
+            const nextButton = document.querySelector('.next');
+            const prevButton = document.querySelector('.prev');
+
+            nextButton?.addEventListener('click', () => {
+                stopAutoSlide();
+                nextSlide();
                 startAutoSlide();
             });
+
+            prevButton?.addEventListener('click', () => {
+                stopAutoSlide();
+                prevSlide();
+                startAutoSlide();
+            });
+
+            // Dot navigation
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    stopAutoSlide();
+                    showSlide(index);
+                    startAutoSlide();
+                });
+            });
+
+            // Touch support
+            carousel.addEventListener('touchstart', (e) => {
+                startPos = e.touches[0].clientX;
+                isDragging = true;
+                carousel.style.transition = 'none';
+                stopAutoSlide();
+            });
+
+            carousel.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const currentPosition = e.touches[0].clientX;
+                const diff = currentPosition - startPos;
+                currentTranslate = prevTranslate + diff;
+                carousel.style.transform = `translateX(${currentTranslate}px)`;
+            });
+
+            carousel.addEventListener('touchend', () => {
+                isDragging = false;
+                carousel.style.transition = 'transform 0.5s ease-in-out';
+                const movedBy = currentTranslate - prevTranslate;
+
+                if (movedBy < -100 && currentIndex < totalSlides - 1) {
+                    nextSlide();
+                } else if (movedBy > 100 && currentIndex > 0) {
+                    prevSlide();
+                } else {
+                    updateSlidePosition();
+                }
+
+                prevTranslate = currentIndex * -100;
+                startAutoSlide();
+            });
+
+            // Mouse hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+            carouselContainer.addEventListener('mouseleave', startAutoSlide);
+
+            // Initialize
+            startAutoSlide();
+            updateSlidePosition();
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                carousel.style.transition = 'none';
+                updateSlidePosition();
+                setTimeout(() => {
+                    carousel.style.transition = 'transform 0.5s ease-in-out';
+                }, 0);
+            });
         });
-
-        // Start auto sliding
-        startAutoSlide();
-
-        // Pause auto sliding on hover
-        document.querySelector('.carousel-container').addEventListener('mouseenter', stopAutoSlide);
-        document.querySelector('.carousel-container').addEventListener('mouseleave', startAutoSlide);
     </script>
 </body>
 

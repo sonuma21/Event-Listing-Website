@@ -1,7 +1,7 @@
 <section class=" bg-black">
     <div class="container flex items-center gap-2">
         <div class=" flex gap-1">
-            <p>Events</p> <i class="ml-2 fa-solid fa-bullhorn"></i>
+            <p>Notices</p> <i class="ml-2 fa-solid fa-bullhorn"></i>
         </div>
         <div class="flex items-center w-full">
             <marquee behavior="scroll" direction="left" onmouseover="this.stop()" onmouseout="this.start()">
@@ -16,13 +16,13 @@
 <section class="bg-[var(--primary)]">
     <nav>
         <div class="container flex justify-between items-center py-2 text-black">
-            <div class="">
-                <img src="" alt="">
+            <div class="font-bold flex items-center text-xl  ">
+                <a href="{{route('home')}}">Event छ !!</a>
             </div>
             <div>
-                <form action="{{ route('compare') }}" method="get" class="bg-slate-300 rounded-lg">
-                    <input class="w-[300px] border border-gray-400 px-4 py-2 rounded-lg" type="text" name="q">
-                    <button class ="text-green-800 font-bold py-[6px] px-4 rounded-lg cursor-pointer">Compare</button>
+                <form action="{{ route('compare') }}" method="get">
+                    <input class="w-[300px] border border-gray-400 px-4 py-2 rounded-full" type="text" name="q" placeholder="search event">
+                    <button class =" font-bold px-3 py-1 text-white border-[1px] border-slate-400 text-lg rounded-full cursor-pointer bg-amber-400 hover:bg-amber-500"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </form>
             </div>
             <div>
