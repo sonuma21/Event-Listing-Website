@@ -36,6 +36,9 @@
 
     <section class="py-4">
         <div class="container">
+            <div class="pb-8 flex justify-center items-center">
+                <h1 class="text-black text-3xl  border-b-[1px] max-w-fit">Browse through your desired interest</h1>
+            </div>
             <div class="hidden lg:flex items-center justify-center">
                 <ul class="flex gap-6">
                     @foreach ($categories as $category)
@@ -43,7 +46,7 @@
                             <a href="{{ route('category', $category->slug) }}"
                                 class="flex flex-col items-center text-gray-800 no-underline hover:scale-105 transition-transform duration-200">
                                 <div
-                                    class="w-16 h-16 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md">
+                                    class="w-30 h-30 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md">
                                     <img src="{{ asset('storage/' . $category->image)}}"
                                         alt="{{ $category->eng_title }}" class="w-full h-full object-cover">
                                 </div>

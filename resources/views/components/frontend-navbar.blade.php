@@ -20,11 +20,9 @@
                 <img src="" alt="">
             </div>
             <div>
-                <form action="#" method="get">
-                    <input type="search" name="search" placeholder="search event"
-                        class="border rounded-full px-4 py-1.5">
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-
+                <form action="{{ route('compare') }}" method="get" class="bg-slate-300 rounded-lg">
+                    <input class="w-[300px] border border-gray-400 px-4 py-2 rounded-lg" type="text" name="q">
+                    <button class ="text-green-800 font-bold py-[6px] px-4 rounded-lg cursor-pointer">Compare</button>
                 </form>
             </div>
             <div>

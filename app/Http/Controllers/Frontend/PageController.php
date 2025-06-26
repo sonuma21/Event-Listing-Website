@@ -121,4 +121,9 @@ class PageController extends Controller
     public function notFound(){
         return view('frontend.404error');
     }
+    public function compare(Request $request){
+        $q = $request->q;
+        $results = event::where('title','like',"%$q%")->OrderBy('date','desc')->get();
+        return view('frontend.compare',compact('results','q'));
+    }
 }
