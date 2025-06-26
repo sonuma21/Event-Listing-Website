@@ -44,7 +44,7 @@
                                 class="flex flex-col items-center text-gray-800 no-underline hover:scale-105 transition-transform duration-200">
                                 <div
                                     class="w-16 h-16 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md">
-                                    <img src="{{ $category->image ? asset('storage/' . $category->image) : 'https://source.unsplash.com/100x100/?icon,category' }}"
+                                    <img src="{{ asset('storage/' . $category->image)}}"
                                         alt="{{ $category->eng_title }}" class="w-full h-full object-cover">
                                 </div>
                                 <span class="mt-2 text-sm font-medium text-center">{{ $category->eng_title }}</span>

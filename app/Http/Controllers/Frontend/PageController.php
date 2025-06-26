@@ -118,4 +118,7 @@ class PageController extends Controller
         $categoryevents= $category->events()->paginate(8);
         return view('frontend.category',compact('categoryevents','category'));
     }
+    public function notFound(){
+        return view('frontend.404error');
+    }
 }
