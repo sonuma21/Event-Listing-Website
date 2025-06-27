@@ -1,6 +1,6 @@
 <x-frontend-layout>
 
-        {{-- Event Details --}}
+    {{-- Event Details --}}
 
     <section class="py-10">
 
@@ -68,25 +68,49 @@
 
 
             </div>
-            <div class="col-span-4">
+            <div class="col-span-4 ml-5">
+                <div class="flex flex-col gap-4 ">
+                    <div class="mb-4">
+                        <button>payment</button>
+                    </div>
+                    <div>
+                        <div class="mb-4">
+                            <h1 class="text-lg font-bold py-2.5">Requirements:</h1>
+                            <ul class="list-disc list-inside">
+                                 {!! $event->requirements ?? 'No requirements' !!}
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold">
+                            Contact no.
+                        </h1>
+                        <p>
+                            <i class="fa-solid fa-phone-volume"></i> {{$organizer->phone}}
 
+                        </p>
+                        <p class="text-sm mt-2.5 text-blue-400">
+                            For any query feel free to contant given number.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-            {{-- Other Events You May Like --}}
+    {{-- Other Events You May Like --}}
     <section>
         <div class="container">
-           <div>
-                 <div class="flex items-center pb-2.5 font-bold text-3xl text-black border-b-[1px] border-slate-500">
-                <h1>Other Events You May Like</h1>
+            <div>
+                <div class="flex items-center pb-2.5 font-bold text-3xl text-black border-b-[1px] border-slate-500">
+                    <h1>Other Events You May Like</h1>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-4 py-8">
+                    @foreach ($relatedEvents as $relatedEvent)
+                        <x-event-card :event="$relatedEvent" />
+                    @endforeach
+                </div>
             </div>
-             <div class="grid grid-cols-1 sm:grid-cols-4 py-8">
-                @foreach ($relatedEvents as $relatedEvent)
-                     <x-event-card :event="$relatedEvent" />
-                @endforeach
-            </div>
-           </div>
         </div>
     </section>
 </x-frontend-layout>

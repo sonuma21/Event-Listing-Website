@@ -5,6 +5,7 @@ namespace App\Filament\Organizer\Resources;
 use App\Filament\Organizer\Resources\EventResource\Pages;
 use App\Filament\Organizer\Resources\EventResource\RelationManagers;
 use App\Models\Event;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,30 +21,104 @@ class EventResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function canCreate(): bool
+    public static function canDelete($record): bool
     {
-        return false;
+        return $record->status === 'pending';
     }
+
 
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                 Forms\Components\FileUpload::make('images')
-                    ->multiple()
-                    ->image()
-                    ->directory('event-images')
-                    ->maxFiles(5)
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif'])
-                    ->maxSize(5120) // 5MB max per file
-                    ->required(),
+        $isEditing = $form->getOperation() === 'edit';
 
-            ]);
+        $schema = [
+            Forms\Components\TextInput::make('title')
+                ->label('Event Title')
+                ->required()
+                ->maxLength(255)
+                ->visible(! $isEditing),
+
+            Forms\Components\DatePicker::make('date')
+                ->required()
+                ->visible(! $isEditing),
+
+            Forms\Components\TimePicker::make('time')
+                ->required()
+                ->visible(! $isEditing),
+
+            Forms\Components\TextInput::make('location')
+                ->label('Event Location')
+                ->required()
+                ->visible(! $isEditing),
+
+            Forms\Components\FileUpload::make('images')
+                ->label('Event Images')
+                ->multiple()
+                ->image()
+                ->directory('event-images')
+                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif'])
+                ->maxSize(5120)
+                ->maxFiles(5),
+
+            Forms\Components\CheckboxList::make('categories')
+                ->relationship('categories', 'eng_title')
+                ->label('Categories')
+                ->required()
+                ->visible(! $isEditing),
+
+            Forms\Components\Radio::make('feesOption')
+                ->label('Fees Option')
+                ->options([
+                    'required' => 'Fees Required',
+                    'not-required' => 'No Fees',
+                ])
+                ->live()
+                ->default('not-required')
+                ->dehydrated(false)
+                ->visible(! $isEditing),
+
+            Forms\Components\TextInput::make('fees')
+                ->label('Event Fees')
+                ->numeric()
+                ->prefix('NRP')
+                ->minValue(0)
+                ->nullable()
+                ->required(fn(Forms\Get $get) => $get('feesOption') === 'required')
+                ->visible(fn(Forms\Get $get) => $get('feesOption') === 'required' && ! $isEditing),
+
+        ];
+
+        if ($isEditing) {
+            $schema[] = Forms\Components\TextInput::make('form')
+                ->label('Registration Form URL')
+                ->url()
+                ->maxLength(255)
+                ->nullable();
+
+            $schema[] = Forms\Components\RichEditor::make('requirements')
+                ->nullable()
+                ->label('Requirements')
+                ->toolbarButtons([
+                    'bold',
+                    'italic',
+                    'bulletList',
+                    'orderedList',
+                    'link',
+                    'undo',
+                    'redo'
+                ]);
+        }
+
+        return $form->schema($schema);
     }
 
+
+
+
     public static function table(Table $table): Table
-      {
+    {
+        $panelId = Filament::getCurrentPanel()?->getId();
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
@@ -55,6 +130,15 @@ class EventResource extends Resource
                 Tables\Columns\TextColumn::make('time'),
                 Tables\Columns\TextColumn::make('location')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->sortable()
+                    ->badge()
+                    ->colors([
+                        'warning' => 'pending',
+                        'success' => 'approved',
+                        'danger' => 'rejected',
+                    ])
+                    ->visible($panelId === 'organizer'),
                 Tables\Columns\ImageColumn::make('images')
                     ->stacked()
                     ->limit(3)
@@ -75,11 +159,10 @@ class EventResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ]);
-            // ->bulkActions([
-            //     Tables\Actions\BulkActionGroup::make([
-            //         Tables\Actions\DeleteBulkAction::make(),
-            //     ]),
-            // ])
+
+
+
+
     }
 
 
