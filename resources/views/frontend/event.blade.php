@@ -1,3 +1,27 @@
+<style>
+    .qtyminus,
+    .qtyplus {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+
+    .qtyminus:hover,
+    .qtyplus:hover {
+        background-color: #e0e0e0;
+    }
+
+    input#quantity {
+        width: 50px;
+        text-align: center;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+</style>
 <x-frontend-layout>
 
     {{-- Event Details --}}
@@ -70,14 +94,102 @@
             </div>
             <div class="col-span-4 ml-5">
                 <div class="flex flex-col gap-4 ">
-                    <div class="mb-4">
-                        <button>payment</button>
+                    <div class="mb-4 border-[1px] rounded-lg px-4 py-2">
+                        <p class="font-semibold text-center">{{ $event->title }}</p>
+                        <div class="flex items-center justify-between">
+                            <p class="">Date: {{ $event->date }}</p>
+                            <p>Time:
+                                {{ \Carbon\Carbon::parse($event->time)->timezone('Asia/Kathmandu')->format('h:i A') }}
+                            </p>
+                        </div>
+                        <div class="">
+                            <input type="text" name="event_id" value="{{ $event->id }}" hidden>
+                            <div class="flex justify-between items-center">
+                                <label for="quantity">Quantity: </label>
+                                <div class="flex gap-0.5">
+                                    <button type="button" class="qtyminus">-</button>
+                                    <input type="text" id="quantity" name="quantity" value="1" readonly>
+                                    <button type="button" class="qtyplus">+</button>
+                                </div>
+                            </div>
+                            <div class="w-full flex justify-center items-center py-1.5">
+                                <button type="button" class="w-full px-3 py-2 rounded-lg "
+                                    data-modal-target="get-ticket-modal" data-modal-toggle="get-ticket-modal">Get
+                                    Tickets</button>
+
+                            </div>
+                            <!-- Modal -->
+                            <div id="get-ticket-modal" tabindex="-1" aria-hidden="true"
+                                class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div class="relative p-4 w-full max-w-2xl max-h-full">
+                                    <!-- Modal content -->
+                                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                        <!-- Modal header -->
+                                        <div
+                                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Buy Tickets
+                                            </h3>
+                                            <button type="button"
+                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                                data-modal-hide="get-ticket-modal">
+                                                <svg class="w-3 h-3" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                </svg>
+                                                <span class="sr-only">Close modal</span>
+                                            </button>
+                                        </div>
+                                        <!-- Modal body -->
+                                        <div class="grid grid-cols-12 items-center justify-between p-4">
+                                            <div class="col-span-8">
+                                                <div class="text-center">
+                                                    <h1 class="text-xl font-medium">{{ $event->title }}</h1>
+                                                    <div class="flex items-center justify-center gap-2 mt-2">
+                                                        <label for="modal-quantity">Quantity:</label>
+                                                        <div class="flex items-center gap-0.5">
+                                                            <button type="button" onclick="updateQuantity(-1)"
+                                                                class="qtyminus">-</button>
+                                                            <input type="number" id="modal-quantity" value="1"
+                                                                min="1"
+                                                                class="w-[50px] flex justify-center p-[5px] text-center border-[1px] rounded-[5px] border-gray-200"
+                                                                readonly>
+                                                            <button type="button" onclick="updateQuantity(1)"
+                                                                class="qtyplus">+</button>
+                                                        </div>
+                                                    </div>
+                                                    <p>Amount:{{$event->fees}} </p>
+                                                    <button type="button"
+                                                        class="w-full px-3 py-2 rounded-lg bg-green-600 text-white mt-4"
+                                                        data-modal-hide="get-ticket-modal"></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-span-4">
+                                                <div class="w-full h-[100px] overflow-hidden">
+                                                    <img src="{{ asset('images/growth.png') }}" alt="Event image"
+                                                        class="w-full h-full object-cover">
+                                                </div>
+                                                <div>
+                                                    <h1>welcome to home</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
                     <div>
                         <div class="mb-4">
                             <h1 class="text-lg font-bold py-2.5">Requirements:</h1>
                             <ul class="list-disc list-inside">
-                                 {!! $event->requirements ?? 'No requirements' !!}
+                                {!! $event->requirements ?? 'No requirements' !!}
                             </ul>
                         </div>
                     </div>
@@ -86,7 +198,7 @@
                             Contact no.
                         </h1>
                         <p>
-                            <i class="fa-solid fa-phone-volume"></i> {{$organizer->phone}}
+                            <i class="fa-solid fa-phone-volume"></i> {{ $organizer->phone }}
 
                         </p>
                         <p class="text-sm mt-2.5 text-blue-400">
@@ -114,3 +226,39 @@
         </div>
     </section>
 </x-frontend-layout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const qtyMinus = document.querySelector('.qtyminus');
+        const qtyPlus = document.querySelector('.qtyplus');
+        const qtyInput = document.querySelector('#quantity');
+        const modalQuantity = document.querySelector('#modal-quantity');
+
+        // Update quantity for both inputs
+        window.updateQuantity = function(change) {
+            let value = parseInt(qtyInput.value) + change;
+            if (value < 1) value = 1; // Prevent quantity from going below 1
+            qtyInput.value = value;
+            modalQuantity.value = value;
+        };
+
+        // Update quantity on minus click (outside modal)
+        if (qtyMinus) {
+            qtyMinus.addEventListener('click', () => {
+                updateQuantity(-1);
+            });
+        }
+
+        // Update quantity on plus click (outside modal)
+        if (qtyPlus) {
+            qtyPlus.addEventListener('click', () => {
+                updateQuantity(1);
+            });
+        }
+
+        // Sync modal quantity with main input when modal is shown
+        document.addEventListener('show.bs.modal', () => {
+            modalQuantity.value = qtyInput.value;
+        });
+    });
+</script>
