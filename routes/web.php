@@ -4,6 +4,8 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Checkout;
+use App\Models\event;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/khalti-callback',[CheckoutController::class,'khalti_callback'])->name('khalti_callback');
 
 });
+
+Route::get("/checkout/invoice/{id}", function ($id){
+    $checkout = Checkout::find($id);
+    return view ('checkout.invoice', compact('checkout'));
+})->name('invoice');
 
 Route::get('/google/login', function () {
     return Socialite::driver('google')->redirect();
