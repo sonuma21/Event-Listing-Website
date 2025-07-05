@@ -41,4 +41,8 @@ class Organizer extends Authenticatable implements FilamentUser
     {
         return true;
     }
+    public function checkouts(): HasMany
+    {
+        return $this->hasMany(Checkout::class);
+    }
 }

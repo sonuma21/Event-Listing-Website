@@ -127,7 +127,8 @@
                                         <!-- Modal header -->
                                         <div
                                             class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-                                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Buy Tickets
+                                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Order
+                                                Summary
                                             </h3>
                                             <button type="button"
                                                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -142,42 +143,53 @@
                                                 <span class="sr-only">Close modal</span>
                                             </button>
                                         </div>
-                                        <!-- Modal body -->
-                                        <div class="grid grid-cols-12 items-center justify-between p-4">
-                                            <div class="col-span-8">
-                                                <div class="text-center">
-                                                    <h1 class="text-xl font-medium">{{ $event->title }}</h1>
-                                                    <div class="flex items-center justify-center gap-2 mt-2">
-                                                        <label for="modal-quantity">Quantity:</label>
-                                                        <div class="flex items-center gap-0.5">
-                                                            <button type="button" onclick="updateQuantity(-1)"
-                                                                class="qtyminus">-</button>
-                                                            <input type="number" id="modal-quantity" value="1"
-                                                                min="1"
-                                                                class="w-[50px] flex justify-center p-[5px] text-center border-[1px] rounded-[5px] border-gray-200"
-                                                                readonly>
-                                                            <button type="button" onclick="updateQuantity(1)"
-                                                                class="qtyplus">+</button>
-                                                        </div>
+                                        <div class="py-10 flex flex-col gap-1">
+                                            <div class="container">
+                                                <img class="shadow-lg w-full object-cover"
+                                                    src="{{ $event->images && !empty($event->images) ? asset('storage/' . $event->images[0]) : asset('images/default.jpg') }}"
+                                                    alt="{{ $event->name }}">
+
+                                            </div>
+                                            <div
+                                                class=" container justify-center items-center border-[1px] px-6 py-4 rounded-lg">
+                                                <h1 class="font-medium">{{ $event->title }}</h1>
+                                                <div class="flex items-center justify-between gap-2 mt-2">
+                                                    <label for="modal-quantity">Quantity:</label>
+                                                    <div class="flex items-center gap-0.5">
+                                                        <button type="button" onclick="updateQuantity(-1)"
+                                                            class="qtyminus">-</button>
+                                                        <input type="number" id="modal-quantity" value="1"
+                                                            min="1"
+                                                            class="w-[50px] flex justify-center p-[5px] text-center border-[1px] rounded-[5px] border-gray-200"
+                                                            readonly>
+                                                        <button type="button" onclick="updateQuantity(1)"
+                                                            class="qtyplus">+</button>
                                                     </div>
-                                                    <p>Amount:{{$event->fees}} </p>
-                                                    <button type="button"
-                                                        class="w-full px-3 py-2 rounded-lg bg-green-600 text-white mt-4"
-                                                        data-modal-hide="get-ticket-modal"></button>
                                                 </div>
+                                                <p id="modal-amount">Amount: Npr. {{ $event->fees }}</p>
+
+
                                             </div>
-                                            <div class="col-span-4">
-                                                <div class="w-full h-[100px] overflow-hidden">
-                                                    <img src="{{ asset('images/growth.png') }}" alt="Event image"
-                                                        class="w-full h-full object-cover">
-                                                </div>
+                                            <div class="container flex justify-end items-center">
                                                 <div>
-                                                    <h1>welcome to home</h1>
+                                                    <form action="{{ route('checkout') }}" method="POST">
+                                                        @csrf
+                                                        <input type="text" name="organizer_id"
+                                                            value="{{ $event->organizer_id }}" hidden>
+                                                        <input type="text" name="quantity" id="form-quantity"
+                                                            value="1" hidden>
+                                                        <input type="text" name="total_amount" id="form-total-amount"
+                                                            value="{{ $event->fees }}" hidden>
+                                                        <input type="text" name="event_id"
+                                                            value="{{ $event->id }}" hidden>
+                                                        <button type="submit"
+                                                            class="w-full px-3 py-2 rounded-lg bg-green-600 text-white mt-4"
+                                                            data-modal-hide="get-ticket-modal">Check out</button>
+                                                    </form>
                                                 </div>
                                             </div>
+
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -229,36 +241,54 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Initialize variables
         const qtyMinus = document.querySelector('.qtyminus');
         const qtyPlus = document.querySelector('.qtyplus');
-        const qtyInput = document.querySelector('#quantity');
+        const qtyInput = document.querySelector('#quantity'); // Main page quantity input, if exists
         const modalQuantity = document.querySelector('#modal-quantity');
+        const modalAmount = document.querySelector('#modal-amount');
+        const formQuantityInput = document.querySelector('#form-quantity');
+        const formTotalAmountInput = document.querySelector('#form-total-amount');
+        const eventFees = parseFloat('{{ $event->fees }}') || 0; // Safely parse fees, default to 0 if invalid
 
-        // Update quantity for both inputs
+        // Update quantity and amount
         window.updateQuantity = function(change) {
-            let value = parseInt(qtyInput.value) + change;
+            let value = parseInt(modalQuantity.value) + change;
             if (value < 1) value = 1; // Prevent quantity from going below 1
-            qtyInput.value = value;
             modalQuantity.value = value;
+            if (qtyInput) qtyInput.value = value; // Sync with main input, if exists
+            formQuantityInput.value = value; // Update hidden form input
+            updateAmount(value);
         };
 
-        // Update quantity on minus click (outside modal)
+        // Update amount based on quantity
+        function updateAmount(quantity) {
+            const total = (eventFees * quantity).toFixed(2); // Calculate total with 2 decimal places
+            modalAmount.textContent = `Amount: Npr. ${total}`; // Update amount display
+            formTotalAmountInput.value = total; // Update hidden form input
+        }
+
+        // Update quantity on minus click
         if (qtyMinus) {
             qtyMinus.addEventListener('click', () => {
                 updateQuantity(-1);
             });
         }
 
-        // Update quantity on plus click (outside modal)
+        // Update quantity on plus click
         if (qtyPlus) {
             qtyPlus.addEventListener('click', () => {
                 updateQuantity(1);
             });
         }
 
-        // Sync modal quantity with main input when modal is shown
+        // Sync modal quantity and amount with main input when modal is shown
         document.addEventListener('show.bs.modal', () => {
-            modalQuantity.value = qtyInput.value;
+            if (qtyInput) modalQuantity.value = qtyInput.value || 1;
+            updateAmount(parseInt(modalQuantity.value));
         });
+
+        // Initialize amount and form inputs on page load
+        updateAmount(parseInt(modalQuantity.value));
     });
 </script>
