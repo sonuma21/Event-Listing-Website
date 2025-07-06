@@ -5,6 +5,7 @@ namespace App\Filament\Organizer\Resources;
 use App\Filament\Organizer\Resources\CheckoutResource\Pages;
 use App\Filament\Organizer\Resources\CheckoutResource\RelationManagers;
 use App\Models\Checkout;
+use Doctrine\DBAL\Driver\IBMDB2\Exception\CannotCreateTemporaryFile;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,6 +21,11 @@ class CheckoutResource extends Resource
     protected static ?string $model = Checkout::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+     public static function canCreate(): bool
+    {
+        return false;
+    }
 
     public static function form(Form $form): Form
     {
@@ -90,7 +96,7 @@ class CheckoutResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Action::make("Download Invoice")
                     ->url(fn(Checkout $record)=>route('invoice', $record->id), shouldOpenInNewTab:true),
             ])

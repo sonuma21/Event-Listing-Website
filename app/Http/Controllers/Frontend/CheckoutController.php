@@ -30,9 +30,8 @@ class CheckoutController extends Controller
 
         // Handle free event (total_amount is 0)
         if ($request->total_amount == 0) {
-            toast("You have successfully registered for the free event!","success");
+            toast("You have successfully registered for the free event!", "success");
             return redirect('/');
-
         }
 
         $response = Http::withHeaders([
@@ -74,8 +73,11 @@ class CheckoutController extends Controller
             $checkout = Checkout::find($checkout_id);
             $checkout->status = 'paid';
             $checkout->save();
-            return redirect('/');
+
+            toast("Payment successful! Your invoice is ready for download.", "success");
+            return redirect()->route('invoice', $checkout->id);
         }
+        toast("Payment verification failed.", "error");
         return redirect('/');
     }
 }

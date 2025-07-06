@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->string('payment_method');
+            $table->boolean('is_new')->default('true');
             $table->timestamps();
         });
     }
