@@ -5,5 +5,4 @@ return [
     App\Providers\Filament\AdminPanelProvider::class,
     App\Providers\Filament\OrganizerPanelProvider::class,
     RealRashid\SweetAlert\SweetAlertServiceProvider::class,
-
 ];

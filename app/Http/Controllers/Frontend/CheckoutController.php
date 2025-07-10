@@ -3,14 +3,28 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Checkout;
+use App\Models\event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\View;
 
 class CheckoutController extends Controller
 {
+    public function __construct()
+    {
+
+        $categories = Category::all();
+        $latest_events = event::where('status', 'approved')->orderBy('id', 'desc')->limit(5)->get();
+        View::share([
+            'categories' => $categories,
+            'latest_events' => $latest_events
+
+        ]);
+    }
     public function checkout(Request $request)
     {
 
@@ -79,5 +93,23 @@ class CheckoutController extends Controller
         }
         toast("Payment verification failed.", "error");
         return redirect('/');
+    }
+    public function index()
+    {
+        $checkouts = Checkout::where('user_id', Auth::id())
+            ->with('event')
+            ->latest()
+            ->get();
+
+        return view('frontend.checkout-history', compact('checkouts'));
+    }
+
+    public function voucher(Checkout $checkout)
+    {
+        if ($checkout->user_id !== Auth::id()) {
+            return redirect()->route('checkout.history')->with('error', 'Unauthorized access.');
+        }
+
+        return view('checkout.invoice', compact('checkout'));
     }
 }

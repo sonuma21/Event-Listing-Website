@@ -240,9 +240,10 @@
                             </li>
                         @else
                             <li>
-                                <a href="#"
+                                <a href="{{route('checkout.history')}}"
                                     class="block px-4 py-2 hover:bg-blue-50 hover:text-gray-800 transition duration-150 ease-in-out">
-                                    My Events
+                                    Checkout History
+
                                 </a>
                             </li>
                             <li>

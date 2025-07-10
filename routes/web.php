@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
+
 
 Route::get("/",[PageController::class,'home'])->name('home');
 Route::post("/request-event",[PageController::class,'request_event'])->name('request_event');
@@ -33,6 +33,10 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
     Route::get('/khalti-callback',[CheckoutController::class,'khalti_callback'])->name('khalti_callback');
+    Route::get('/checkout-history', [CheckoutController::class, 'index'])->name('checkout.history');
+    Route::get('/voucher/{checkout}', [CheckoutController::class, 'voucher'])->name('voucher');
+
+
 
 });
 
