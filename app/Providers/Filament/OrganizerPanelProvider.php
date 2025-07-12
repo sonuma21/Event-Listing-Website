@@ -36,10 +36,13 @@ class OrganizerPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->pages([
+                \App\Filament\Organizer\Pages\Dashboard::class,
+            ])
             ->discoverWidgets(in: app_path('Filament/Organizer/Widgets'), for: 'App\\Filament\\Organizer\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+                \App\Filament\Organizer\Widgets\StatWidget::class,
+                \App\Filament\Organizer\Widgets\RecentCheckout::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 class RecentCheckout extends BaseWidget
 {
     protected array | string | int $columnSpan = 'full';
+    public static ?int $sort = 2;
+
     protected string $pollingInterval = '2s';
 
     public function table(Table $table): Table
