@@ -2,16 +2,33 @@
 
 namespace App\Filament\Organizer\Pages;
 
+use App\Models\Checkout;
+use Filament\Actions\Action;
 use Filament\Pages\Dashboard as BaseDashboard;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends BaseDashboard
 {
-    protected function getHeaderWidgets(): array
+    protected function getHeaderActions(): array
     {
-        return [\App\Filament\Organizer\Widgets\StatWidget::class,];
+
+        $totalRevenue = Checkout::where('organizer_id', Auth::id())->sum('total_amount');
+        
+
+        return [
+            Action::make('requestPayment')
+                ->label('Request Payment')
+                ->button()
+                ->color('primary')
+                ->action(function () {
+
+                        return redirect()->route('filament.organizer.resources.payment-requests.create');
+
+                })
+                ->disabled($totalRevenue == 0)
+                ->tooltip($totalRevenue == 0 ? 'No revenue available to request.' : null),
+        ];
     }
-    protected function getFooterWidgets(): array
-    {
-        return [\App\Filament\Organizer\Widgets\RecentCheckout::class,];
-    }
+
+
 }

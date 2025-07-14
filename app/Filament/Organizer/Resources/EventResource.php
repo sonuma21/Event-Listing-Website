@@ -19,7 +19,7 @@ class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
     public static function canDelete($record): bool
     {
@@ -38,6 +38,7 @@ class EventResource extends Resource
                 ->required()
                 ->maxLength(255)
                 ->visible(! $isEditing),
+
 
             Forms\Components\DatePicker::make('date')
                 ->required()
@@ -124,6 +125,9 @@ class EventResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('fees')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('date')
                     ->date()
                     ->sortable(),
