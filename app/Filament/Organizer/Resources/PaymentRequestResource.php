@@ -19,6 +19,16 @@ class PaymentRequestResource extends Resource
     protected static ?string $navigationLabel = 'Payment Requests';
     protected static ?string $recordTitleAttribute = 'amount';
 
+    public static function canDelete($record): bool
+    {
+        return $record->status === 'pending';
+    }
+
+    public static function canEdit($record): bool
+    {
+        return $record->status === 'pending';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -30,10 +40,13 @@ class PaymentRequestResource extends Resource
                     ->numeric()
                     ->required()
                     ->minValue(0)
-                    ->default(fn () => Checkout::where('organizer_id', Auth::id())->sum('total_amount'))
+                    ->default(fn () => Checkout::where('organizer_id', Auth::id())->sum('total_amount') - PaymentRequest::where('organizer_id', Auth::id())->where('status', 'approved')->sum('amount'))
                     ->maxValue(fn () => Checkout::where('organizer_id', Auth::id())->sum('total_amount') - PaymentRequest::where('organizer_id', Auth::id())->where('status', 'approved')->sum('amount'))
                     ->prefix('NRs.')
-                    ->helperText(fn () => 'You can only withdraw up to NRs. ' . number_format(Checkout::where('organizer_id', Auth::id())->sum('total_amount') - PaymentRequest::where('organizer_id', Auth::id())->where('status', 'approved')->sum('amount'), 0) . '.'),
+                    ->helperText(fn () =>
+                        'You can only withdraw up to NRs. ' . number_format(Checkout::where('organizer_id', Auth::id())->sum('total_amount') - PaymentRequest::where('organizer_id', Auth::id())->where('status', 'approved')->sum('amount'), 0) . '.' .
+                        ' Note: A 10% event charge will be deducted from the requested amount.'
+                    ),
                 Forms\Components\TextInput::make('bank_name')
                     ->maxLength(255)
                     ->required(),

@@ -33,8 +33,10 @@ class PaymentRequestResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
+                    ->label('Requested Amount')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(fn ($state) => 'NRs. ' . number_format($state * 0.90) ),
                  Tables\Columns\SelectColumn::make('status')
                     ->options([
                         "pending"=>"Pending",
