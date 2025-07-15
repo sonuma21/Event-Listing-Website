@@ -15,6 +15,10 @@ body {
     font-family: "Winky Sans", sans-serif;
     color: var(--text-color);
 }
+.winky{
+     font-family: "Winky Sans", sans-serif;
+    color: var(--text-color);
+}
 
 .text-primary {
     color: var(--primary);
