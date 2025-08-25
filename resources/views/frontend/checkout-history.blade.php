@@ -14,8 +14,8 @@
             @if (!$checkouts || $checkouts->isEmpty())
                 <div class="text-center p-8 bg-white rounded-lg shadow-md">
                     <p class="text-lg text-gray-600">You have no checkouts yet.</p>
-                    <a href="{{ route('/') }}"
-                        class="mt-4 inline-block bg-pink-500 text-white px-6 py-2 rounded-md hover:bg-pink-600">
+                    <a href="{{ route('home') }}"
+                        class="mt-4 inline-block bg-[var(--secondary)] text-white px-6 py-2 rounded-md hover:bg-[var(--dark-secondary)]">
                         Browse Now
                     </a>
                 </div>
@@ -87,7 +87,7 @@
                                             View Details
                                         </a>
                                         @if ($checkout->status === 'pending' && in_array($checkout->payment_method, ['khalti']))
-                                            <a href="{{ route('payment.retry', $checkout->id) }}"
+                                            <a href="#"
                                                 class="inline-block text-sm text-yellow-600 hover:text-yellow-700 font-semibold border border-yellow-400 px-3 py-1 rounded-md ml-2">
                                                 Retry Payment
                                             </a>

@@ -1,4 +1,4 @@
-<section class=" bg-black">
+<section class=" bg-[var(--cyan-magic)] text-white">
     <div class="container flex items-center gap-2">
         <div class=" flex gap-1">
             <p>Notices</p> <i class="ml-2 fa-solid fa-bullhorn"></i>
@@ -15,18 +15,22 @@
 </section>
 <section class="bg-[var(--primary)]">
     <nav>
-        <div class="container flex justify-between items-center py-2 text-black">
+        <div class="container flex justify-between items-center py-2 text-[var(--cyan)]">
             <div class="font-bold flex items-center text-xl  ">
-                <a href="{{route('home')}}">Event छ !!</a>
+                <a href="{{ route('home') }}">Event छ !!</a>
             </div>
             <div>
-                <form action="{{ route('compare') }}" method="get">
-                    <input class="w-[300px] border border-gray-400 px-4 py-2 rounded-full" type="text" name="q" placeholder="search event">
-                    <button class =" font-bold px-3 py-1 text-white border-[1px] border-slate-400 text-lg rounded-full cursor-pointer bg-amber-400 hover:bg-amber-500"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <form action="{{ route('compare') }}" method="get" class="relative w-[300px]">
+                    <input class="w-full border border-[var(--cyan)] px-4 py-2 pr-12 rounded-full" type="text"
+                        name="q" placeholder="search event">
+                    <button
+                        class="absolute right-2 top-1/2 transform -translate-y-1/2 font-bold px-3 py-1 text-[var(--cyan)] hover:text-[var(--cyan-magic)] text-lg rounded-full cursor-pointer ">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
                 </form>
             </div>
             <div>
-                <button type="button" class="bg-[var(--secondary)] text-white px-4 py-2 rounded-2xl"
+                <button type="button" class=" text-white border-2 border-[var(--cyan)] px-4 py-2 rounded-2xl"
                     data-modal-target="request-modal" data-modal-toggle="request-modal">Create
                     Event</button>
             </div>
@@ -37,14 +41,14 @@
                 class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                 <div class="relative p-4 w-full max-w-2xl max-h-full">
                     <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg shadow-sm">
+                    <div class="relative bg-[var(--primary)] text-white rounded-lg shadow-sm">
                         <!-- Modal header -->
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t text-[var(--cyan)] border-gray-200">
                             <h1 class="text-3xl">
                                 Create Your Event
                             </h1>
                             <button type="button"
-                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                                class="text-gray-400 bg-transparent hover:text-[var(--cyan)] rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
                                 data-modal-hide="request-modal">
                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 14 14">
@@ -155,9 +159,9 @@
                                                 <div class="flex items-center mb-2">
                                                     <input type="checkbox" id="category-{{ $category->id }}"
                                                         name="categories[]" value="{{ $category->id }}"
-                                                        class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                                        class="h-4 w-4 text-[var(--cyan)] border-gray-300 rounded focus:ring-[var(--cyan)]">
                                                     <label for="category-{{ $category->id }}"
-                                                        class="ml-2 text-sm text-gray-700 hover:text-indigo-600">
+                                                        class="ml-2 text-sm text-white hover:text-[var(--cyan)]">
                                                         {{ $category->eng_title }}
                                                     </label>
                                                 </div>
@@ -202,7 +206,7 @@
                                 </div>
                                 <div class="flex justify-center items-center mt-6">
                                     <button type="submit"
-                                        class="bg-[var(--btn-color)] px-6 py-3   text-white rounded-xl hover:scale-105">Send
+                                        class="border-2 border-[var(--cyan)] px-6 py-3   text-white rounded-xl hover:scale-105">Send
                                         Request</button>
                                 </div>
                             </form>
@@ -215,11 +219,11 @@
 
             <div class="relative">
                 <button type="button"
-                    class="flex items-center p-2 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-full transition duration-150 ease-in-out"
+                    class="flex items-center p-2 text-white hover:text-[var(--cyan)] transition duration-150 ease-in-out"
                     id="user-menu-button" aria-expanded="false" aria-haspopup="true"
                     data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
                     <span class="sr-only">Open user menu</span>
-                    <i class="fa-solid fa-user text-lg"></i>
+                    <i class="fa-solid fa-user text-xl"></i>
                 </button>
 
                 <!-- Dropdown menu -->
@@ -240,7 +244,10 @@
                             </li>
                         @else
                             <li>
-                                <a href="{{route('checkout.history')}}"
+                                <p class="block px-4 py-2 text-gray-800 font-bold">Welcome {{ Auth::user()->name }}</p>
+                            </li>
+                            <li>
+                                <a href="{{ route('checkout.history') }}"
                                     class="block px-4 py-2 hover:bg-blue-50 hover:text-gray-800 transition duration-150 ease-in-out">
                                     Checkout History
 

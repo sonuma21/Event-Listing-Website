@@ -1,10 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap");
 :root {
-    --primary: #ffca28;
-    --secondary: #b4210a;
+    --primary: #131a22;
+    --secondary:#ac1f0a ;
+    --dark-secondary:#7e1606 ;
     --text-color: #8e8d8e;
     --btn-color: #8aab59;
     --light-yellow: #ededd6;
+    --cyan: #00bcd4;
+    --cyan-magic:#46a49f;
+    --gray: #212934;
 }
 .container {
     width: 86%;
@@ -104,4 +108,86 @@ body {
 .dot.active {
     background: #333;
 }
+/* Event card styles */
+.event-card {
+    background-color: #ffffff; /* bg-white */
+    color: #111827; /* text-gray-900 */
+    display: flex;
+    flex-direction: column;
+    max-width: 24rem; /* max-w-sm */
+    min-height: 250px; /* min-h-[250px] */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06); /* shadow */
+    transition: box-shadow 200ms ease-in-out, border 200ms ease-in-out, transform 300ms ease-in-out; /* transition-shadow duration-200 + transform */
+    opacity: 0;
+    transform: translateY(20px);
+}
+.event-card.visible {
+    animation: fadeInScroll 0.5s ease-out forwards;
+}
+.event-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* hover:shadow-2xl */
+    border: 3px solid var(--cyan); /* hover:border-[var(--cyan)] hover:border-3 */
+    transform: scale(1.05); /* hover:scale-105 */
+}
 
+
+@keyframes fadeInScroll {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.event-card a {
+    text-decoration: none; 
+}
+
+.event-card .aspect-16-9 {
+    width: 100%;
+    aspect-ratio: 16 / 9; 
+}
+
+.event-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.event-card .content {
+    padding: 1rem; 
+    flex-grow: 1; 
+}
+
+.event-card h5 {
+    font-size: 1.125rem; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* truncate */
+    margin-bottom: 0; /* mb-0 */
+}
+
+.footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* space-y-2 */
+}
+.footer ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 300ms ease-in-out; /* transition-colors duration-300 */
+}
+
+.footer ul li a:hover {
+    color: var(--cyan); /* hover:text-[var(--cyan)] */
+}

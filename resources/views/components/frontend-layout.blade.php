@@ -26,7 +26,7 @@
         {{ $slot }}
     </main>
     <footer>
-
+        <x-frontend-footer/>
     </footer>
 
 
@@ -156,6 +156,30 @@
                     carousel.style.transition = 'transform 0.5s ease-in-out';
                 }, 0);
             });
+        });
+        
+    </script>
+    <script>
+         document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.event-card');
+
+              const observer = new IntersectionObserver(
+                 (entries) => {
+                      entries.forEach((entry) => {
+                         if (entry.isIntersecting) {
+                             entry.target.classList.add('visible');
+                            
+                            observer.unobserve(entry.target);
+                      }
+                 });
+              },
+                {
+                 threshold: 0.1, 
+                 rootMargin: '0px 0px -50px 0px'
+                 }
+             );
+
+             cards.forEach((card) => observer.observe(card));
         });
     </script>
 </body>

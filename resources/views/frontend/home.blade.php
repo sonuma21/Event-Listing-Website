@@ -2,7 +2,7 @@
 
     {{-- Hero Section --}}
 
-    <section class="">
+    <section class="bg-[var(--primary)]">
         <div class="carousel-container">
             <div class="carousel" id="carousel">
                 @foreach ($carousels as $index => $carousel)
@@ -34,19 +34,20 @@
 
     {{-- categories --}}
 
-    <section class="py-4">
+    <section class="pt-12 pb-16 bg-[var(--primary)]">
         <div class="container">
-            <div class="pb-8 flex justify-center items-center">
-                <h1 class="text-black text-3xl  border-b-[1px] max-w-fit">Browse through your desired interest</h1>
+            <div
+                class="flex justify-center text-white bg-[var(--cyan-magic)] items-center border-2 rounded-full border-[var(--cyan)] max-w-fit mx-auto px-4 py-2">
+                <h1 class=" text-3xl">Browse through your desired interest</h1>
             </div>
-            <div class="hidden lg:flex items-center justify-center">
+            <div class="hidden lg:flex items-center pt-8 justify-center">
                 <ul class="flex gap-6">
                     @foreach ($categories as $category)
                         <li class="flex flex-col items-center">
                             <a href="{{ route('category', $category->slug) }}"
-                                class="flex flex-col items-center text-gray-800 no-underline hover:scale-105 transition-transform duration-200">
+                                class="flex flex-col items-center text-[var(--cyan)] no-underline hover:scale-105 transition-transform duration-200">
                                 <div
-                                    class="w-30 h-30 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md">
+                                    class="w-30 h-30 rounded-full bg-white border-2 border-[var(--cyan)] flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md">
                                     <img src="{{ asset('storage/' . $category->image) }}"
                                         alt="{{ $category->eng_title }}" class="w-full h-full object-cover">
                                 </div>
@@ -61,15 +62,17 @@
 
     {{-- Specific Category --}}
 
-    <section>
+    <section class="bg-[var(--cyan-magic)] py-16">
         <div class="container space-y-10">
 
             @foreach ($categories as $category)
                 <div>
-                    <h1
-                        class="text-3xl mb-5  py-2 px-3 border-l-4 border-[var(--primary)] mt-5 primary rounded-lg shadow-md">
-                        {{ $category->eng_title }}
-                    </h1>
+                    <div class="bg-[var(--primary)] text-white border-l-4 border-white shadow-md rounded-lg">
+                        <h1
+                            class="text-3xl mb-5  py-2 px-3  primary ">
+                            {{ $category->eng_title }}
+                        </h1>
+                    </div>
                     <div class=" grid grid-cols-1 sm:grid-cols-4 gap-3">
 
                         @foreach ($category->events as $event)
@@ -83,4 +86,6 @@
 
         </div>
     </section>
+
+
 </x-frontend-layout>

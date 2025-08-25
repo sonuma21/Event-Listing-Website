@@ -29,7 +29,7 @@
     <section class="py-10">
 
         <div class="container grid grid-cols-12 pb-2.5 border-b-[1px]">
-            <div class="flex flex-col col-span-8 px-6 border-r-[4px] ">
+            <div class="flex flex-col col-span-8 px-6 ">
 
                 <div class="w-full">
                     <img class="rounded-lg shadow-lg w-full object-cover"
@@ -92,10 +92,10 @@
 
 
             </div>
-            <div class="col-span-4 ml-5">
+            <div class="col-span-4 ml-5 bg-[var(--gray)] text-slate-300 rounded-xl px-6 py-4">
                 <div class="flex flex-col gap-4 ">
                     <div class="mb-4 border-[1px] rounded-lg px-4 py-2">
-                        <p class="font-semibold text-center">{{ $event->title }}</p>
+                        <p class="font-semibold text-center pb-4">{{ $event->title }}</p>
                         <div class="flex items-center justify-between">
                             <p class="">Date: {{ $event->date }}</p>
                             <p>Time:
@@ -106,14 +106,14 @@
                             <input type="text" name="event_id" value="{{ $event->id }}" hidden>
                             <div class="flex justify-between items-center">
                                 <label for="quantity">Quantity: </label>
-                                <div class="flex gap-0.5">
+                                <div class="flex gap-0.5 text-slate-500">
                                     <button type="button" class="qtyminus">-</button>
                                     <input type="text" id="quantity" name="quantity" value="1" readonly>
                                     <button type="button" class="qtyplus">+</button>
                                 </div>
                             </div>
-                            <div class="w-full flex justify-center items-center py-1.5">
-                                <button type="button" class="w-full px-3 py-2 rounded-lg "
+                            <div class="w-full flex justify-center items-center pt-4">
+                                <button type="button" class="w-full px-3 py-2 rounded-lg bg-green-600 hover:bg-green-900 text-white "
                                     data-modal-target="get-ticket-modal" data-modal-toggle="get-ticket-modal">Get
                                     Tickets</button>
 
@@ -151,7 +151,7 @@
 
                                             </div>
                                             <div
-                                                class=" container justify-center items-center border-[1px] px-6 py-4 rounded-lg">
+                                                class=" container justify-center text-slate-500 items-center border-[1px] px-6 py-4 rounded-lg">
                                                 <h1 class="font-medium">{{ $event->title }}</h1>
                                                 <div class="flex items-center justify-between gap-2 mt-2">
                                                     <label for="modal-quantity">Quantity:</label>
@@ -229,7 +229,7 @@
                 <div class="flex items-center pb-2.5 font-bold text-3xl text-black border-b-[1px] border-slate-500">
                     <h1>Other Events You May Like</h1>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-4 py-8">
+                <div class="grid grid-cols-1 sm:grid-cols-4 py-8 gap-3">
                     @foreach ($relatedEvents as $relatedEvent)
                         <x-event-card :event="$relatedEvent" />
                     @endforeach

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Organizer\PaymentController;
+use App\Http\Controllers\PreferenceController;
 
 Route::get("/",[PageController::class,'home'])->name('home');
 Route::post("/request-event",[PageController::class,'request_event'])->name('request_event');
@@ -39,7 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout-history', [CheckoutController::class, 'index'])->name('checkout.history');
     Route::get('/voucher/{checkout}', [CheckoutController::class, 'voucher'])->name('voucher');
 
-
+    Route::get('/preferences', [PreferenceController::class, 'edit'])->name('preferences.edit');
+    Route::post('/preferences', [PreferenceController::class, 'store'])->name('preferences.store');
 
 });
 

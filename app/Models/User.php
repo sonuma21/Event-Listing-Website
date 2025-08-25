@@ -51,5 +51,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Checkout::class);
     }
-   
+
+
+    public function preferences() : HasMany
+    {
+        return $this->hasMany(UserPreference::class);
+    }
+
 }
