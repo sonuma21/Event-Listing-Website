@@ -28,7 +28,7 @@
 
     <section class="py-10">
 
-        <div class="container grid grid-cols-12 pb-2.5 border-b-[1px]">
+        <div class="container grid grid-cols-12">
             <div class="flex flex-col col-span-8 px-6 ">
 
                 <div class="w-full">
@@ -183,7 +183,7 @@
                                                         <input type="text" name="event_id"
                                                             value="{{ $event->id }}" hidden>
                                                         <button type="submit"
-                                                            class="w-full px-3 py-2 rounded-lg bg-green-600 text-white mt-4"
+                                                            class="w-full px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white mt-4"
                                                             data-modal-hide="get-ticket-modal">Check out</button>
                                                     </form>
                                                 </div>
@@ -223,10 +223,10 @@
     </section>
 
     {{-- Other Events You May Like --}}
-    <section>
+    <section class="py-10 home-color">
         <div class="container">
             <div>
-                <div class="flex items-center pb-2.5 font-bold text-3xl text-black border-b-[1px] border-slate-500">
+                <div class="flex items-center pb-2.5 font-bold text-3xl text-white border-b-[1px] border-white">
                     <h1>Other Events You May Like</h1>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-4 py-8 gap-3">

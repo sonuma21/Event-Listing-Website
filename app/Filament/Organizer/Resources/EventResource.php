@@ -91,12 +91,7 @@ class EventResource extends Resource
         ];
 
         if ($isEditing) {
-            $schema[] = Forms\Components\TextInput::make('form')
-                ->label('Registration Form URL')
-                ->url()
-                ->maxLength(255)
-                ->nullable();
-
+           
             $schema[] = Forms\Components\RichEditor::make('requirements')
                 ->nullable()
                 ->label('Requirements')

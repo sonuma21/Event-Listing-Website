@@ -18,7 +18,9 @@ Route::post("/request-event",[PageController::class,'request_event'])->name('req
 Route::get('/event/{id}',[PageController::class,'event'])->name('event');
 Route::get('/category/{slug}',[PageController::class,'category'])->name('category');
 Route::get('/compare',[PageController::class,'compare'])->name('compare');
-
+Route::get('/events',[PageController::class,'events'])->name('events');
+Route::get('/about',[PageController::class,'about'])->name('about');
+Route::get('/contact',[PageController::class,'contact'])->name('contact');
 Route::post("/request-payment",[PaymentController::class,'request_payment'])->name('request_payment');
 
 

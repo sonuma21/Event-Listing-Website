@@ -83,7 +83,7 @@
                                     </td>
                                     <td class="px-6 py-4 space-x-2">
                                         <a href="{{ route('voucher', $checkout->id) }}" target="_blank"
-                                            class="text-black  hover:bg-[var(--primary)] px-4 py-2 rounded-lg font-semibold">
+                                            class="text-black hover:text-white hover:bg-[var(--primary)] px-4 py-2 rounded-lg font-semibold">
                                             View Details
                                         </a>
                                         @if ($checkout->status === 'pending' && in_array($checkout->payment_method, ['khalti']))

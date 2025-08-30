@@ -21,7 +21,7 @@
             </div>
             <div>
                 <form action="{{ route('compare') }}" method="get" class="relative w-[300px]">
-                    <input class="w-full border border-[var(--cyan)] px-4 py-2 pr-12 rounded-full" type="text"
+                    <input class="w-full text-black border border-[var(--cyan)] px-4 py-2 pr-12 rounded-full" type="text"
                         name="q" placeholder="search event">
                     <button
                         class="absolute right-2 top-1/2 transform -translate-y-1/2 font-bold px-3 py-1 text-[var(--cyan)] hover:text-[var(--cyan-magic)] text-lg rounded-full cursor-pointer ">
@@ -67,7 +67,7 @@
                                         <label for="name" class="block mb-2 text-sm">Your Name: <span
                                                 class="text-red-500">*</span></label>
                                         <input type="text" name="name" id="name" value="{{ old('name') }}"
-                                            class="w-full rounded-xl">
+                                            class="w-full text-gray-900 rounded-xl">
                                         @error('name')
                                             <div class="text-red-500">
                                                 {{ $message }}
@@ -78,7 +78,7 @@
                                         <label for="email" class="block px-1 mb-2 text-sm">Your Email: <span
                                                 class="text-red-500">*</span></label>
                                         <input type="email" name="email" id="email" value="{{ old('email') }}"
-                                            class="w-full rounded-xl">
+                                            class="w-full  text-gray-900 rounded-xl">
                                         @error('email')
                                             <div class="text-red-500">
                                                 {{ $message }}
@@ -89,7 +89,7 @@
                                         <label for="phone" class="block px-1 mb-2 text-sm">Your Phone number:<span
                                                 class="text-red-500">*</span></label>
                                         <input type="tel" name="phone" id="phone" value="{{ old('phone') }}"
-                                            class="w-full rounded-xl required">
+                                            class="w-full  text-gray-900 rounded-xl required">
                                         @error('phone')
                                             <div class="text-red-500">
                                                 {{ $message }}
@@ -102,7 +102,7 @@
                                         <label for="title" class="block px-1 mb-2 text-sm">Event Title:<span
                                                 class="text-red-500">*</span></label>
                                         <input type="text" name="title" id="title" value="{{ old('title') }}"
-                                            class="w-full rounded-xl">
+                                            class="w-full  text-gray-900 rounded-xl">
                                         @error('title')
                                             <div class="text-red-500">
                                                 {{ $message }}
@@ -114,7 +114,7 @@
                                         <label for="date" class="block px-1 mb-2 text-sm">Event Date:<span
                                                 class="text-red-500">*</span></label>
                                         <input type="date" name="date" id="date" value="{{ old('date') }}"
-                                            class="w-full rounded-xl required">
+                                            class="w-full  text-gray-900 rounded-xl required">
                                         @error('date')
                                             <div class="text-red-500">
                                                 {{ $message }}
@@ -125,7 +125,7 @@
                                         <label for="time" class="block px-1 mb-2 text-sm">Event Time:<span
                                                 class="text-red-500">*</span></label>
                                         <input type="time" name="time" id="time"
-                                            value="{{ old('time') }}" class="w-full rounded-xl required">
+                                            value="{{ old('time') }}" class="w-full  text-gray-900 rounded-xl required">
                                         @error('time')
                                             <div class="text-red-500">
                                                 {{ $message }}
@@ -136,7 +136,7 @@
                                         <label for="name" class="block px-1 mb-2 text-sm">Event Location:<span
                                                 class="text-red-500">*</span></label>
                                         <input type="text" name="location" id="location"
-                                            value="{{ old('location') }}" class="w-full rounded-xl">
+                                            value="{{ old('location') }}" class="w-full  text-gray-900 rounded-xl">
                                         @error('location')
                                             <div class="text-red-500">
                                                 {{ $message }}
@@ -191,7 +191,7 @@
                                                 <span class="absolute left-3 text-gray-500">NRP</span>
                                                 <input type="number" name="fees" id="fees" step="5.00"
                                                     min="0" value="{{ old('fees') }}"
-                                                    class="w-full pl-12 rounded-xl border-slate-500 {{ old('feesOption') == 'required' ? 'required' : '' }}">
+                                                    class="w-full pl-12  text-gray-900 rounded-xl border-slate-500 {{ old('feesOption') == 'required' ? 'required' : '' }}">
                                             </div>
                                             @error('fees')
                                                 <div class="text-red-500">

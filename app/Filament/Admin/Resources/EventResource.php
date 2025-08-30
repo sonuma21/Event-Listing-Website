@@ -29,7 +29,7 @@ class EventResource extends Resource
         return $form
             ->schema([
                 Forms\Components\DatePicker::make('expire_date')
-                    ->required(),
+                    ->label('Expiration Date'),
                 Forms\Components\Select::make('status')
                     ->required()
                     ->options([
@@ -38,6 +38,10 @@ class EventResource extends Resource
                         "suspended" => "Suspended",
                     ])
                     ->default('pending'),
+                Forms\Components\CheckboxList::make('categories')
+                ->relationship('categories', 'eng_title')
+                ->label('Categories')
+                ->required(),
 
             ]);
     }

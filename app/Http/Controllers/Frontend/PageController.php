@@ -127,4 +127,14 @@ class PageController extends Controller
         $results = event::where('title','like',"%$q%")->OrderBy('date','desc')->get();
         return view('frontend.compare',compact('results','q'));
     }
+     public function events(){
+        $events = event::where('status', 'approved')->orderBy('id', 'desc')->paginate(12);
+        return view('frontend.all', compact('events'));
+    }
+    public function about(){
+        return view('frontend.about');
+    }
+    public function contact(){
+        return view('frontend.contact');
+    }
 }

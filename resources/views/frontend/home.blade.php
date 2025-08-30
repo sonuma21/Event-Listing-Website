@@ -37,7 +37,7 @@
     <section class="pt-12 pb-16 bg-[var(--primary)]">
         <div class="container">
             <div
-                class="flex justify-center text-white bg-[var(--cyan-magic)] items-center border-2 rounded-full border-[var(--cyan)] max-w-fit mx-auto px-4 py-2">
+                class="flex justify-center text-white home-color items-center border-2 rounded-full border-[var(--cyan)] max-w-fit mx-auto px-4 py-2">
                 <h1 class=" text-3xl">Browse through your desired interest</h1>
             </div>
             <div class="hidden lg:flex items-center pt-8 justify-center">
@@ -62,7 +62,7 @@
 
     {{-- Specific Category --}}
 
-    <section class="bg-[var(--cyan-magic)] py-16">
+    <section class="home-color py-16">
         <div class="container space-y-10">
 
             @foreach ($categories as $category)
