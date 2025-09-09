@@ -5,6 +5,7 @@ namespace App\Filament\Organizer\Resources;
 use App\Filament\Organizer\Resources\EventResource\Pages;
 use App\Filament\Organizer\Resources\EventResource\RelationManagers;
 use App\Models\Event;
+use Closure;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -41,8 +42,21 @@ class EventResource extends Resource
 
 
             Forms\Components\DatePicker::make('date')
-                ->required()
-                ->visible(! $isEditing),
+            ->required()
+            ->minDate(now()->format('Y-m-d')) // Only allows today's date or future dates
+            ->rules([
+                fn (string $operation): Closure => function (string $attribute, $value, Closure $fail) use ($operation) {
+                    if ($operation === 'create') {
+                        $selectedDate = \Carbon\Carbon::parse($value);
+                        $today = \Carbon\Carbon::today();
+
+                        if ($selectedDate->lessThan($today)) {
+                            $fail('The date must be today or a future date.');
+                        }
+                    }
+                },
+            ])
+            ->visible(! $isEditing),
 
             Forms\Components\TimePicker::make('time')
                 ->required()
@@ -91,7 +105,7 @@ class EventResource extends Resource
         ];
 
         if ($isEditing) {
-           
+
             $schema[] = Forms\Components\RichEditor::make('requirements')
                 ->nullable()
                 ->label('Requirements')

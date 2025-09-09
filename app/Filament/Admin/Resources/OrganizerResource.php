@@ -40,8 +40,12 @@ class OrganizerResource extends Resource
                     ->tel()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('prev_images')
+                Forms\Components\ViewField::make('prev_images')
+                    ->view('forms.fields.prev-images')
+                    ->label('Previous Images')
                     ->columnSpanFull(),
+
+
             ]);
     }
 
@@ -57,6 +61,16 @@ class OrganizerResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
+                Tables\Columns\ImageColumn::make('prev_images')
+                    ->getStateUsing(
+                        fn($record) =>
+                        collect(json_decode($record->prev_images, true))
+                            ->pluck('path')
+                            ->map(fn ($path) => asset('storage/' . $path))
+                            ->toArray()
+                    )
+                    ->stacked()   // shows them on top of each other
+                    ->limit(3),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

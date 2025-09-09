@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Mail\EventApprovedNotification;
+use App\Mail\EventSuspendedNotification;
 use App\Models\Event;
 use App\Models\Organizer;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,7 @@ class EventObserver
      */
     public function updated(Event $event): void
     {
-        if ($event->isDirty('status') && $event->status == 'approved') {
+        if ($event->isDirty('status')) {
             $organizer = $event->organizer;
 
             $data = [
@@ -36,27 +37,23 @@ class EventObserver
                 'event_location' => $event->location,
                 'password' => null,
             ];
-            if (count($organizer->events)==1) {
-                if ($organizer) {
-                    $password = rand(1111, 9999);
-                    $organizer->password = Hash::make($password);
-                    $organizer->saveQuietly();
 
-                    $data = [
-                        'organizer_name' => $organizer->name,
-                        'organizer_email' => $organizer->email,
-                        'event_title' => $event->title,
-                        'event_date' => (new \DateTime($event->date))->format('Y-m-d'),
-                        'event_time' => $event->time,
-                        'event_location' => $event->location,
-                        'password' => $password,
-                    ];
+            if ($event->status == 'approved') {
+                if (count($organizer->events) == 1) {
+                    if ($organizer) {
+                        $password = rand(1111, 9999);
+                        $organizer->password = Hash::make($password);
+                        $organizer->saveQuietly();
+
+                        $data['password'] = $password;
+                    }
                 }
+                Mail::to($organizer->email)->send(new EventApprovedNotification($data));
+            } elseif ($event->status == 'suspended') {
+                Mail::to($organizer->email)->send(new EventSuspendedNotification($data));
             }
-            Mail::to($organizer->email)->send(new EventApprovedNotification($data));
         }
     }
-
 
     /**
      * Handle the Event "deleted" event.
